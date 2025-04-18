@@ -38,10 +38,24 @@ body>p{
 
     /* grid */
     display: grid;
+    position: relative; /* we need this for game over */
     grid-template-columns: repeat(auto-fill, 20px);
     grid-template-rows: repeat(auto-fill, 20px);
 
 }
+#game-over{
+    display: none;
+    position: absolute;
+    height: 40%;
+    width: 100%;
+    background-color: green;
+    /* center */
+    top: 50%;
+    transform: translate(0, -50%);
+
+
+}
+
 #flappy-bird{
     background-color: black;
     grid-row-start: 5;
