@@ -1,0 +1,49 @@
+body{
+    margin: 0;
+}
+body>p{
+    margin-left: 40vw;  /*need to change */
+}
+#game{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* height: 100vh; */
+    box-sizing: border-box;
+    padding: 8px 4px;
+    width: 80vw;
+    margin-left: 10vw;
+    border: 5px solid orange;
+    border-radius: 8px;
+}
+#score-box{
+    display: flex;
+    justify-content: space-between;
+    border: 3px green solid;    
+    border-radius: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2px 24px;
+    
+}
+
+#game-board{
+    /* design */
+    border: 2px black dotted;
+    border-radius: 8px;
+    width: 100%;
+    height: 480px;
+    background-color: whitesmoke;
+    margin-top: 8px;
+
+    /* grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 20px);
+    grid-template-rows: repeat(auto-fill, 20px);
+
+}
+#flappy-bird{
+    background-color: black;
+    grid-row-start: 5;
+    grid-column-start: 10;
+}
