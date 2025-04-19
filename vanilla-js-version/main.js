@@ -1,8 +1,38 @@
 
-
 function main(){
-    let is_game_over = false;
-    let obstacles = [];
+
+
+    function collission(hole_rows){
+        const flappy = document.getElementById('flappy-bird');
+        const obstacle = document.getElementById('obstacle');
+        const hole = document.getElementById('hole')
+
+        let flappy_row = parseInt(getComputedStyle(flappy).gridRowStart);
+        let flappy_column = parseInt(getComputedStyle(flappy).gridColumnStart);
+
+        let obstacle_column = parseInt(getComputedStyle(obstacle).gridColumnStart);
+
+        // console.log('flappy', flappy_row, flappy_column)
+        // console.log('obstacle', obstacle_column)
+        // console.log('holes', hole_rows)    
+
+        if(flappy_column === obstacle_column){
+            console.log('same col');
+            console.log(hole_rows, flappy_row);
+            
+            if(hole_rows.includes(flappy_row)){ // flappy in hole > safe
+                // hard code
+                console.log('safe');
+                
+            }else{
+                console.log('hit');
+                game_over()
+                
+            }
+        }
+
+    }
+
     function flappy_falling(){
         const flappy_bird = document.getElementById('flappy-bird');
         var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
@@ -14,23 +44,49 @@ function main(){
     }
     function move_obstacles(){
         // for each obstacle in obstacles, move left (gridColumnStart - 1, gridRowStart)
-        for(let obstacle in obstacles){
-            console.log(obstacle)
-        }
+        // console.log('should move -1 to left');
+        
+        
+        
+        let obstacle = document.getElementById('obstacle');
+        let hole = document.getElementById('hole');
+        // move obstacle
+        let obstacle_column = parseInt(getComputedStyle(obstacle).gridColumnStart);
+        obstacle.style.gridColumnStart = obstacle_column - 1;
+        // move holes
+        let hole_column = parseInt(getComputedStyle(hole).gridColumnStart);
+        hole.style.gridColumnStart = hole_column - 1;
+
     }
     
-    function show_obstacles(){
+    function show_obstacles(rows, columns, hole_size){
+        let obstacle = document.getElementById('obstacle');
+        let hole = document.getElementById('hole');
+        let hole_center = 15
+        // obstacle movement
+        obstacle.style.gridRowStart = 1;
+        obstacle.style.gridRowEnd = rows+1;
+        obstacle.style.gridColumnStart = 20;
+        //  hole movement
+        hole.style.gridRowStart = hole_center - hole_size/2;
+        hole.style.gridRowEnd = hole_center + hole_size/2 + 1;
+        hole.style.gridColumnStart = obstacle.style.gridColumnStart;
+
+        // hole rows store
+        let hole_rows = [hole_center - 2, hole_center -1 , hole_center, hole_center + 1, hole_center+2];
+        console.log(hole_rows);
+        return hole_rows;
 
 
     }
-    function detect_change(rows, columns){
+    function detect_change(rows, columns, hole_rows){
         document.addEventListener('keydown', (event)=>{
-            console.log(event.key)
+            // console.log(event.key)
             var key = event.key;
             const flappy_bird = document.getElementById('flappy-bird');
             var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
             var flappy_bird_col = parseInt(getComputedStyle(flappy_bird).gridColumnStart);    
-    
+            // collission(hole_rows)
             if(is_game_over == false){
                 switch(key){
                     case 'ArrowUp':
@@ -54,6 +110,7 @@ function main(){
                     
         
                 }
+                collission(hole_rows)
             }else{
                 console.log('game is currently on pause, press Space to restart')
             }
@@ -78,14 +135,20 @@ function main(){
     const columns = getComputedStyle(board).getPropertyValue("grid-template-columns").split(" ").length;
     const rows = getComputedStyle(board).getPropertyValue("grid-template-rows").split(" ").length;
 
+    let is_game_over = false;
+    const hole_size = 4; // only even values
+
     console.log("Columns:", columns);
     console.log("Rows:", rows);  
 
-    detect_change(rows, columns)
+
+    var hole_rows = show_obstacles(rows, columns, hole_size);
+
+    detect_change(rows, columns, hole_rows);
     let game_loop = setInterval(()=>{
-        // console.log('falling')
-        flappy_falling()
-        move_obstacles()
+        flappy_falling();
+        move_obstacles();
+        collission(hole_rows);
     }, 300)
 }
 
