@@ -116,6 +116,7 @@ function main(){
             }else{
                 console.log('game is currently on pause, press Space to restart')
             }
+            console.log('san');
             
     
             })
