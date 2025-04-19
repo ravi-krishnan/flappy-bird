@@ -1,6 +1,8 @@
 
 
 function main(){
+    let is_game_over = false;
+    let obstacles = [];
     function flappy_falling(){
         const flappy_bird = document.getElementById('flappy-bird');
         var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
@@ -10,41 +12,52 @@ function main(){
         }
         // console.log(flappy_bird.style.gridRowStart);
     }
+    function move_obstacles(){
+        // for each obstacle in obstacles, move left (gridColumnStart - 1, gridRowStart)
+        for(let obstacle in obstacles){
+            console.log(obstacle)
+        }
+    }
     
+    function show_obstacles(){
+
+
+    }
     function detect_change(rows, columns){
         document.addEventListener('keydown', (event)=>{
             console.log(event.key)
-    
             var key = event.key;
             const flappy_bird = document.getElementById('flappy-bird');
             var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
             var flappy_bird_col = parseInt(getComputedStyle(flappy_bird).gridColumnStart);    
     
-    
-            switch(key){
-                case 'ArrowUp':
-                    flappy_bird.style.gridRowStart = Math.min(flappy_bird_row + 1, rows);
-                    if (flappy_bird.style.gridRowStart == rows){
-                        console.log('end');
-                        
-                        game_over()
-                    }
-                    break;
-                case 'ArrowDown':
-                    flappy_bird.style.gridRowStart = Math.max(flappy_bird_row - 1, 0);
-                    break;
-                case 'ArrowLeft':
-                    flappy_bird.style.gridColumnStart = Math.max(flappy_bird_col - 1, 0);
-                    break;
-                case 'ArrowRight':
-                    flappy_bird.style.gridColumnStart = Math.min(flappy_bird_col + 1, columns);
-                
-                    break;
-                default:
-                    console.log('some other key')
-                
-    
+            if(is_game_over == false){
+                switch(key){
+                    case 'ArrowUp':
+                        flappy_bird.style.gridRowStart = Math.min(flappy_bird_row + 1, rows);
+                        if (flappy_bird.style.gridRowStart == rows){
+                            game_over()
+                        }
+                        break;
+                    case 'ArrowDown':
+                        flappy_bird.style.gridRowStart = Math.max(flappy_bird_row - 1, 0);
+                        break;
+                    case 'ArrowLeft':
+                        flappy_bird.style.gridColumnStart = Math.max(flappy_bird_col - 1, 0);
+                        break;
+                    case 'ArrowRight':
+                        flappy_bird.style.gridColumnStart = Math.min(flappy_bird_col + 1, columns);
+                    
+                        break;
+                    default:
+                        console.log('some other key')
+                    
+        
+                }
+            }else{
+                console.log('game is currently on pause, press Space to restart')
             }
+            
     
             })
     }
@@ -54,11 +67,11 @@ function main(){
         // play sound
         // show  over
         // freeze frame
+        is_game_over = true;
         const game_over_overlay = document.getElementById('game-over')
         game_over_overlay.style.display = 'block'
         clearInterval(game_loop)
         console.log('overß');
-        
     }
 
     const board = document.getElementById("game-board");
@@ -72,6 +85,7 @@ function main(){
     let game_loop = setInterval(()=>{
         // console.log('falling')
         flappy_falling()
+        move_obstacles()
     }, 300)
 }
 

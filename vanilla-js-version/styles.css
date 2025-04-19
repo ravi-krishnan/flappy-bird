@@ -53,11 +53,18 @@ body>p{
     top: 50%;
     transform: translate(0, -50%);
 
-
 }
 
 #flappy-bird{
     background-color: black;
     grid-row-start: 5;
     grid-column-start: 10;
+}
+
+#obstacle{
+    background-color: brown;
+
+}
+#hole{
+    background-color: aqua;
 }
