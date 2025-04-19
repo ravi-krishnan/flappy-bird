@@ -1,40 +1,37 @@
 
 function main(){
-
-
+    // ✅
     function collission(hole_rows){
         const flappy = document.getElementById('flappy-bird');
-        const obstacle = document.getElementById('obstacle');
-        const hole = document.getElementById('hole')
+        const obstacles = document.getElementsByClassName('obstacle');
+
         const score = document.getElementById('current-score')
 
         let flappy_row = parseInt(getComputedStyle(flappy).gridRowStart);
         let flappy_column = parseInt(getComputedStyle(flappy).gridColumnStart);
 
-        let obstacle_column = parseInt(getComputedStyle(obstacle).gridColumnStart);
-
-        // console.log('flappy', flappy_row, flappy_column)
-        // console.log('obstacle', obstacle_column)
-        // console.log('holes', hole_rows)    
-
-        if(flappy_column === obstacle_column){
-            console.log('same col');
-            console.log(hole_rows, flappy_row);
-            
-            if(hole_rows.includes(flappy_row)){ // flappy in hole > safe
-                // hard code
-                console.log('safe');
-                score.innerHTML = parseInt(score.innerHTML) + 1;
+        for(let i = 0; i < obstacles.length; i++){
+            let obstacle_column = parseInt(getComputedStyle(obstacles[i]).gridColumnStart);  
+    
+            if(flappy_column === obstacle_column){
+                // console.log('same col');
+                // console.log(hole_rows[i], flappy_row);
                 
-            }else{
-                console.log('hit');
-                gameOver()
-                
+                if(hole_rows[i].includes(flappy_row)){ // flappy in hole > safe
+                    // hard code
+                    console.log('safe');
+                    score.innerHTML = parseInt(score.innerHTML) + 1;
+                    
+                }else{
+                    console.log('hit');
+                    gameOver()
+                    
+                }
             }
         }
 
     }
-
+    // ✅
     function flappyFalling(){
         const flappy_bird = document.getElementById('flappy-bird');
         var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
@@ -42,45 +39,79 @@ function main(){
         if (flappy_bird.style.gridRowStart == rows){
             gameOver()
         }
-        // console.log(flappy_bird.style.gridRowStart);
     }
+
+    // ✅
     function moveObstacles(){
         // for each obstacle in obstacles, move left (gridColumnStart - 1, gridRowStart)
         // console.log('should move -1 to left');
+
+        let obstacles= document.getElementsByClassName('obstacle');
+        let holes = document.getElementsByClassName('hole');
         
-        
-        
-        let obstacle = document.getElementById('obstacle');
-        let hole = document.getElementById('hole');
-        // move obstacle
-        let obstacle_column = parseInt(getComputedStyle(obstacle).gridColumnStart);
-        obstacle.style.gridColumnStart = obstacle_column - 1;
-        // move holes
-        let hole_column = parseInt(getComputedStyle(hole).gridColumnStart);
-        hole.style.gridColumnStart = hole_column - 1;
+        for(let i = 0; i < obstacles.length; i++){
+            // move obstacle
+            let obstacle_column = parseInt(getComputedStyle(obstacles[i]).gridColumnStart);
+            obstacles[i].style.gridColumnStart = obstacle_column - 1;
+
+            // move holes
+            let hole_column = parseInt(getComputedStyle(holes[i]).gridColumnStart);
+            holes[i].style.gridColumnStart = hole_column - 1;
+        }
+
+   
 
     }
-    
-    function showObstacles(rows, columns, hole_size){
-        let obstacle = document.getElementById('obstacle');
-        let hole = document.getElementById('hole');
-        let hole_center = 15
-        // obstacle movement
-        obstacle.style.gridRowStart = 1;
-        obstacle.style.gridRowEnd = rows+1;
-        obstacle.style.gridColumnStart = 20;
-        //  hole movement
-        hole.style.gridRowStart = hole_center - hole_size/2;
-        hole.style.gridRowEnd = hole_center + hole_size/2 + 1;
-        hole.style.gridColumnStart = obstacle.style.gridColumnStart;
-
-        // hole rows store
-        let hole_rows = [hole_center - 2, hole_center -1 , hole_center, hole_center + 1, hole_center+2];
+    // ✅   
+    function createObstacles(rows, columns, hole_size, hole_rows){
         console.log(hole_rows);
-        return hole_rows;
+        
+        const game_board = document.getElementById('game-board');
+        // obstacle and hole creation
+        const new_obstacle =document.createElement('div');
+        new_obstacle.className = 'obstacle';
+        const new_hole = document.createElement('div');
+        new_hole.className = 'hole';
 
+        let hole_center = Math.floor(Math.random() * ((rows - 2) - 2) + 2)
 
+        // obstacle style
+        new_obstacle.style.gridColumnStart = columns;
+        new_obstacle.style.gridRowStart = 1;
+        new_obstacle.style.gridRowEnd = rows + 1;
+
+        // hole style
+        new_hole.style.gridColumnStart = new_obstacle.style.gridColumnStart;
+        new_hole.style.gridRowStart = hole_center - hole_size/2;
+        new_hole.style.gridRowEnd = hole_center + hole_size/2 + 1;
+
+        game_board.appendChild(new_obstacle);
+        game_board.appendChild(new_hole);
+
+        let new_hole_row = []
+        for(let i = -hole_size/2; i < hole_size/2 + 1; i++){
+            new_hole_row.push(hole_center + i);
+        }
+
+        hole_rows.push(new_hole_row);
+        
     }
+    // ✅  
+    function clearObstacles(rows, columns, hole_rows){
+        const game_board = document.getElementById('game-board');
+        const column_threshold = 1;
+        const obstacles = document.getElementsByClassName('obstacle');
+        const holes = document.getElementsByClassName('hole');
+
+        for(let i = 0; i < obstacles.length; i++){
+            if(obstacles[i].style.gridColumnStart <= column_threshold){
+                game_board.removeChild(obstacles[i])
+                game_board.removeChild(holes[i])
+                hole_rows.shift();
+            }
+        }
+    }
+
     function detectChange(rows, columns, hole_rows){
         document.addEventListener('keydown', (event)=>{
             // console.log(event.key)
@@ -88,7 +119,8 @@ function main(){
             const flappy_bird = document.getElementById('flappy-bird');
             var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
             var flappy_bird_col = parseInt(getComputedStyle(flappy_bird).gridColumnStart);    
-            // collission(hole_rows)
+            // console.log(hole_rows);
+            
             if(is_game_over == false){
                 switch(key){
                     case 'ArrowUp':
@@ -116,12 +148,12 @@ function main(){
             }else{
                 console.log('game is currently on pause, press Space to restart')
             }
-            console.log('san');
+            
             
     
             })
     }
-
+    // ✅
     function gameOver(){
         // current score , high score check
         // play sound
@@ -132,7 +164,8 @@ function main(){
         const high_score  = document.getElementById('high-score');
 
         game_over_overlay.style.display = 'block';
-        clearInterval(game_loop)
+        clearInterval(game_loop);
+        clearInterval(object_creation_loop);
         console.log('overß');
         is_game_over = true;
         if(score.innerHTML > high_score.innerHTML){
@@ -149,16 +182,23 @@ function main(){
 
     console.log("Columns:", columns);
     console.log("Rows:", rows);  
-
-
-    var hole_rows = showObstacles(rows, columns, hole_size);
-
+    let hole_rows = []
+    // var hole_rows = showObstacles(rows, columns, hole_size);
     detectChange(rows, columns, hole_rows);
+
+    // game run loop
     let game_loop = setInterval(()=>{
+        
         flappyFalling();
         moveObstacles();
         collission(hole_rows);
+        clearObstacles(rows, columns, hole_rows);
     }, 300)
+
+    // object creation loop
+    let object_creation_loop = setInterval(()=>{
+        createObstacles(rows, columns, hole_size, hole_rows);
+    }, 5000)
 }
 
 main()

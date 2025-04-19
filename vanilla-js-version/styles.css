@@ -52,6 +52,7 @@ body>p{
     /* center */
     top: 50%;
     transform: translate(0, -50%);
+    opacity: 0.3;
 
 }
 
@@ -61,9 +62,9 @@ body>p{
     grid-column-start: 10;
 }
 
-#obstacle{
+.obstacle{
     background-color: brown;
 }
-#hole{
+.hole{
     background-color: whitesmoke;
 }
