@@ -8,12 +8,19 @@ The grid position of an element is defined by its gridRowStart and gridColumnSta
 
 1. Dynamically allocating grid rows and columns made it quite difficult to find the edges of the game board.
 2. The gridRowStart of flappy is actually a string. So adding 1 to it makes it a type coersion.
-
+3. How to create multiple obstacles with different holes?
+4. How to safely fly through holes?
+5. Clearing the obstacles.
+6. Game Over and beyond ...
 
 ## Solutions
 
 1. Utilised getComputedStyle property to compute the height and width of the game-board after rendering.
 2. parseInt and getComputedStyle is used to get the integer value of the renderd flappy's gridRowStart.
+3. Create a different setInterval() to run a create obstacles function. Every x seconds, new obstacle and hole class divs are appended to the game-board. Grid layout of Holes are randomly generated.
+4. Every time a obstacle is created, its holes are added into a list. Until the obstacles expire, the holes are kept.
+5. All obstacles which pass a column threshold are removed from the game-board. Since obstacles and holes are of same size. Each can be removed using a for loop of fixed size. Once these are removed, hole_rows.shift() is used to remove the first such obstacle holes.
+6. My first approach was to restart the game once game is over. But doing so, made the main loop run again and again such that it went out of hand.
 
 ## How it works
 
@@ -24,6 +31,6 @@ The grid position of an element is defined by its gridRowStart and gridColumnSta
 
 ## Current Issues
 
-1. How to implement obstacles?
-2. How to introduce holes in those obstacles?
-3. Flappy - Obstacle interaction.
+1. Restart functionality
+2. Full restructuring of code.
+3. Event loop mismanagement.
