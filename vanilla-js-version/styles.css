@@ -58,8 +58,6 @@ body>p{
 
 #flappy-bird{
     background-color: black;
-    grid-row-start: 5;
-    grid-column-start: 10;
 }
 
 .obstacle{
