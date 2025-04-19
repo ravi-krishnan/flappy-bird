@@ -6,6 +6,7 @@ function main(){
         const flappy = document.getElementById('flappy-bird');
         const obstacle = document.getElementById('obstacle');
         const hole = document.getElementById('hole')
+        const score = document.getElementById('current-score')
 
         let flappy_row = parseInt(getComputedStyle(flappy).gridRowStart);
         let flappy_column = parseInt(getComputedStyle(flappy).gridColumnStart);
@@ -23,6 +24,7 @@ function main(){
             if(hole_rows.includes(flappy_row)){ // flappy in hole > safe
                 // hard code
                 console.log('safe');
+                score.innerHTML = parseInt(score.innerHTML) + 1;
                 
             }else{
                 console.log('hit');
@@ -124,11 +126,17 @@ function main(){
         // play sound
         // show  over
         // freeze frame
-        is_game_over = true;
         const game_over_overlay = document.getElementById('game-over')
-        game_over_overlay.style.display = 'block'
+        const score  = document.getElementById('current-score');
+        const high_score  = document.getElementById('high-score');
+
+        game_over_overlay.style.display = 'block';
         clearInterval(game_loop)
         console.log('overß');
+        is_game_over = true;
+        if(score.innerHTML > high_score.innerHTML){
+            high_score.innerHTML = score.innerHTML;
+        }
     }
 
     const board = document.getElementById("game-board");
