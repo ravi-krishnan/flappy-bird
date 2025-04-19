@@ -28,23 +28,23 @@ function main(){
                 
             }else{
                 console.log('hit');
-                game_over()
+                gameOver()
                 
             }
         }
 
     }
 
-    function flappy_falling(){
+    function flappyFalling(){
         const flappy_bird = document.getElementById('flappy-bird');
         var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
         flappy_bird.style.gridRowStart = flappy_bird_row + 1;
         if (flappy_bird.style.gridRowStart == rows){
-            game_over()
+            gameOver()
         }
         // console.log(flappy_bird.style.gridRowStart);
     }
-    function move_obstacles(){
+    function moveObstacles(){
         // for each obstacle in obstacles, move left (gridColumnStart - 1, gridRowStart)
         // console.log('should move -1 to left');
         
@@ -61,7 +61,7 @@ function main(){
 
     }
     
-    function show_obstacles(rows, columns, hole_size){
+    function showObstacles(rows, columns, hole_size){
         let obstacle = document.getElementById('obstacle');
         let hole = document.getElementById('hole');
         let hole_center = 15
@@ -81,7 +81,7 @@ function main(){
 
 
     }
-    function detect_change(rows, columns, hole_rows){
+    function detectChange(rows, columns, hole_rows){
         document.addEventListener('keydown', (event)=>{
             // console.log(event.key)
             var key = event.key;
@@ -94,7 +94,7 @@ function main(){
                     case 'ArrowUp':
                         flappy_bird.style.gridRowStart = Math.min(flappy_bird_row + 1, rows);
                         if (flappy_bird.style.gridRowStart == rows){
-                            game_over()
+                            gameOver()
                         }
                         break;
                     case 'ArrowDown':
@@ -121,7 +121,7 @@ function main(){
             })
     }
 
-    function game_over(){
+    function gameOver(){
         // current score , high score check
         // play sound
         // show  over
@@ -150,12 +150,12 @@ function main(){
     console.log("Rows:", rows);  
 
 
-    var hole_rows = show_obstacles(rows, columns, hole_size);
+    var hole_rows = showObstacles(rows, columns, hole_size);
 
-    detect_change(rows, columns, hole_rows);
+    detectChange(rows, columns, hole_rows);
     let game_loop = setInterval(()=>{
-        flappy_falling();
-        move_obstacles();
+        flappyFalling();
+        moveObstacles();
         collission(hole_rows);
     }, 300)
 }
