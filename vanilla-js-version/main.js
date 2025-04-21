@@ -130,9 +130,6 @@ function main(){
             var flappy_bird_row = parseInt(getComputedStyle(flappy_bird).gridRowStart);
             var flappy_bird_col = parseInt(getComputedStyle(flappy_bird).gridColumnStart);    
             // console.log(hole_rows);
-            if(is_game_over == true && event.code === 'Space'){
-                restartGame()
-            }
             if(is_game_over == false){
                 switch(key){
                     case 'ArrowUp':
@@ -188,25 +185,6 @@ function main(){
         
     }
 
-    function restartGame(){
-        const score = document.getElementById('current-score');
-        const game_over_overlay = document.getElementById('game-over');
-        const game_board = document.getElementById('game-board');
-        const obstacles = document.getElementsByClassName('obstacle');
-        const holes = document.getElementsByClassName('hole');
-
-
-        game_over_overlay.style.display = 'none';
-        score.innerHTML = 0;
-
-        for(let i = 0; i < obstacles.length; i++){
-            game_board.removeChild(obstacles[i]);
-            game_board.removeChild(holes[i]);
-        }
-        clearInterval(game_loop);
-        clearInterval(object_creation_loop);
-        main();
-    }
     
 
     const board = document.getElementById("game-board");
@@ -238,12 +216,6 @@ function main(){
     object_creation_loop = setInterval(()=>{
         createObstacles(rows, columns, hole_size, hole_rows);
     }, 5000);
-
-    document.addEventListener('keydown', (event)=>{
-        if(event.code === 'Space' & is_game_over & document.getElementById('game-over').style.display === 'block'){
-            restartGame();
-        }
-    })
 
 }
 
