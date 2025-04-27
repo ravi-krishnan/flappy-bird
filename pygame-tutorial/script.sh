@@ -9,6 +9,6 @@ source venv/bin/activate
 echo  "venv activated"
 
 pip install -r requirements.txt
-
+echo "change"
 python  main.py
 
